@@ -3,11 +3,11 @@ const accordion = $(`#${accordionId}`);
 
 // DEV
 // const url =
-//   "https://u8e0yimqpc.execute-api.ap-southeast-2.amazonaws.com/dev/products/available";
+//   "https://l5zra7mmr8.execute-api.ap-southeast-2.amazonaws.com/dev/products/available";
 
 // PROD
-const url =
-  "https://fp4vid2tef.execute-api.ap-southeast-2.amazonaws.com/prod/products/available";
+// const url =
+//   "https://no5pezidt1.execute-api.ap-southeast-2.amazonaws.com/prod/products/available";
 
 // LOCAL
 // const url = "http://localhost:3000/products/available";
@@ -24,12 +24,12 @@ $("#api-key-form").submit(() => {
     method: "GET",
     url: url,
     headers: {
-      "x-api-key": apiKey
+      "x-api-key": apiKey,
     },
-    beforeSend: () => showLoading()
+    beforeSend: () => showLoading(),
   })
-    .done(data => gatDataOnDone(data))
-    .fail(error => getDataOnFailure(error));
+    .done((data) => gatDataOnDone(data))
+    .fail((error) => getDataOnFailure(error));
 });
 
 const showLoading = () => {
@@ -48,18 +48,18 @@ const showProvideApiKey = () => {
   );
 };
 
-const gatDataOnDone = data => {
+const gatDataOnDone = (data) => {
   accordion.empty();
   const productGroups = data.ProductGroups;
 
-  $.each(productGroups, index => {
+  $.each(productGroups, (index) => {
     accordion.append(genSingleCard(productGroups[index], index));
   });
 
   $("input[id='qty']").inputSpinner();
 };
 
-const getDataOnFailure = error => {
+const getDataOnFailure = (error) => {
   accordion.empty();
   console.log(error);
   accordion.append(
@@ -87,8 +87,8 @@ const genSingleCard = (productGroup, index) => {
   </div>`;
 };
 
-const genCardContent = products => {
-  const genProducts = products => {
+const genCardContent = (products) => {
+  const genProducts = (products) => {
     return products.reduce((acc, product) => {
       return acc.concat(genSingleProduct(product));
     }, "");
@@ -101,7 +101,7 @@ const genCardContent = products => {
   return listGroupMarkup;
 };
 
-const genSingleProduct = product => {
+const genSingleProduct = (product) => {
   return `<div class="input-group mb-3">
       <div class="input-group-prepend">
         <div class="input-group-text">

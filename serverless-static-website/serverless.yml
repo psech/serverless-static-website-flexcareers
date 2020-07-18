@@ -1,4 +1,4 @@
-service: serverless-static-website-flexcareers
+service: website-flexcareers
 
 frameworkVersion: ">=1.60.0"
 
@@ -15,6 +15,7 @@ custom:
     errorDocument: index.html
   settings:
     emailQueueName: ${self:service}-${opt:stage}-MessageQueue
+  config: ${file(./infra/serverless-${opt:stage}.yml)}
 
 provider:
   name: aws
@@ -23,6 +24,7 @@ provider:
   region: ${opt:region, 'ap-southeast-2'}
   profile: Danet
   environment:
+    DEBUG_EMAIL: ${self:custom.config.debug-email}
     CLIENT_ID: ${ssm:ZipMoney-Client-Id~true}
     CLIENT_SECRET: ${ssm:ZipMoney-Client-Secret~true}
     TENANT_ID: ${ssm:FlexCareers-Tenant-Id~true}

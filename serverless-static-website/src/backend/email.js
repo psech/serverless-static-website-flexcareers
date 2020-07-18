@@ -26,14 +26,18 @@ const sendEmail = async (event) => {
     },
   });
 
+  const toEmail = getEnv("DEBUG_EMAIL")
+    ? []
+    : [
+        "Robert Kulik <robert@danet.com.au>",
+        "accounts@DataTransferItem.com.au",
+      ];
+
   const message = {
     from: "Danet Portal <portal@danet.com.au>",
-    to: [
-      "Robert Kulik <robert@danet.com.au>",
-      "accounts@DataTransferItem.com.au",
-    ],
+    to: toEmail,
     cc: ["Przemek Sech <przemek.sech@gmail.com>"],
-    subject: "ZipMoney portal new order",
+    subject: "Flex Careers portal new order",
     text: JSON.stringify(products),
     html: emailMessage,
   };

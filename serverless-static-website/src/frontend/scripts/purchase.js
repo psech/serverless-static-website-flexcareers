@@ -30,11 +30,11 @@ $("#confirmPurchase").on("click", function() {
 
   // DEV
   // const url =
-  //   "https://u8e0yimqpc.execute-api.ap-southeast-2.amazonaws.com/dev/products/order";
+  //   "https://l5zra7mmr8.execute-api.ap-southeast-2.amazonaws.com/dev/products/order";
 
   // PROD
-  const url =
-    "https://fp4vid2tef.execute-api.ap-southeast-2.amazonaws.com/prod/products/order";
+  // const url =
+  //   "https://no5pezidt1.execute-api.ap-southeast-2.amazonaws.com/prod/products/order";
 
   // LOCAL
   // const url = "http://localhost:3000/products/order";
