@@ -1,0 +1,90 @@
+service: serverless-static-website-flexcareers
+
+frameworkVersion: ">=1.60.0"
+
+plugins:
+  - serverless-finch
+  - serverless-pseudo-parameters
+  - serverless-offline
+  - serverless-export-env
+
+custom:
+  client:
+    bucketName: ${self:service}-${opt:stage}-bucket
+    distributionFolder: src/frontend
+    errorDocument: index.html
+  settings:
+    emailQueueName: ${self:service}-${opt:stage}-MessageQueue
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'ap-southeast-2'}
+  profile: Danet
+  environment:
+    CLIENT_ID: ${ssm:ZipMoney-Client-Id~true}
+    CLIENT_SECRET: ${ssm:ZipMoney-Client-Secret~true}
+    TENANT_ID: ${ssm:FlexCareers-Tenant-Id~true}
+    SMTP_PASSWORD: ${ssm:mandrill-smtp-password~true}
+    EMAIL_QUEUE_URL:
+      Ref: MessageQueue
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sqs:SendMessage"
+      Resource:
+        - "arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:${self:custom.settings.emailQueueName}"
+  apiKeys:
+    - ${self:service}-${opt:stage}-apikey
+
+package:
+  exclude:
+    - ./**
+    - "!src/**"
+    - "!node_modules/**"
+
+functions:
+  getProducts:
+    handler: src/backend/handler.getProductsHandler
+    timeout: 30
+    events:
+      - http:
+          method: get
+          path: products/available
+          private: true
+          cors: true
+  makeOrder:
+    handler: src/backend/handler.makeOrderHandler
+    timeout: 30
+    events:
+      - http:
+          method: post
+          path: products/order
+          private: true
+          cors: true
+  requestEmail:
+    handler: src/backend/handler.requestEmail
+    timeout: 30
+  sendEmail:
+    handler: src/backend/email.sendEmail
+    timeout: 30
+    events:
+      - sqs: "arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:${self:custom.settings.emailQueueName}"
+        batchSize: 1
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: "AWS::ApiGateway::GatewayResponse"
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
+    MessageQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: ${self:custom.settings.emailQueueName}

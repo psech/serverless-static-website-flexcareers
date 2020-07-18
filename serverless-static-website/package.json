@@ -1,0 +1,35 @@
+{
+  "name": "serverless-static-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/frontend/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "json-server": "json-server ./debug/products.json --port 8080 --watch",
+    "deploy:frontend": "sls client deploy -s dev -r ap-southeast-2 --no-confirm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psech/serverless-static-website.git"
+  },
+  "author": "Przemek Sech",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psech/serverless-static-website/issues"
+  },
+  "homepage": "https://github.com/psech/serverless-static-website#readme",
+  "devDependencies": {
+    "serverless-export-env": "^1.2.0",
+    "serverless-finch": "^2.4.3",
+    "serverless-offline": "^5.12.1",
+    "serverless-pseudo-parameters": "^2.5.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.619.0",
+    "axios": "^0.19.0",
+    "middy": "^0.32.3",
+    "mustache": "^4.0.0",
+    "nodemailer": "^6.4.2",
+    "qs": "^6.9.1"
+  }
+}
