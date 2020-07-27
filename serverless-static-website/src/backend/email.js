@@ -26,12 +26,13 @@ const sendEmail = async (event) => {
     },
   });
 
-  const toEmail = getEnv("DEBUG_EMAIL")
-    ? []
-    : [
-        "Robert Kulik <robert@danet.com.au>",
-        "accounts@DataTransferItem.com.au",
-      ];
+  const toEmail =
+    getEnv("DEBUG_EMAIL") === "true"
+      ? []
+      : [
+          "Robert Kulik <robert@danet.com.au>",
+          "accounts@danet.com.au",
+        ];
 
   const message = {
     from: "Danet Portal <portal@danet.com.au>",
